@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { config } from './config/config.js';
 import sequelize from './config/database.js';
+import './models/index.js'; // Initialize models and relationships
 
 const app = express();
 const port = config.port;

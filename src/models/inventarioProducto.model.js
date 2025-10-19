@@ -1,41 +1,65 @@
 export const InventarioProductoModel = (connection, DataTypes) => {
-    return connection.define('InventarioProducto', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
+  return connection.define('InventarioProducto', {
+    id_inventario: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      comment: 'Identificador único del registro de inventario (SERIAL PRIMARY KEY)'
+    },
+
+    id_producto: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      comment: 'FK a productos_codificacion.id_producto',
+      references: {
+        model: 'productos_codificacion',
+        key: 'id_producto'
       },
-      id_producto: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
-      cantidad_disponible: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      ubicacion: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
-      fecha_entrada: {
-        allowNull: false,
-        type: DataTypes.DATE,
-      },
-      estado: {
-        allowNull: false,
-        type: DataTypes.ENUM('activo', 'inactivo'),
-        defaultValue: 'activo',
-      },
-      notas: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
-    }, {
-      timestamps: true,
-      createdAt: 'creadoEn',
-      updatedAt: 'actualizadoEn'
-    })
-  }
+      onUpdate: 'CASCADE',
+      onDelete: 'RESTRICT'
+    },
+
+    cantidad_disponible: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      comment: 'Unidades disponibles en stock (por defecto 0)'
+    },
+
+    ubicacion: {
+      allowNull: true,
+      type: DataTypes.STRING(100),
+      comment: 'Bodega, estante o zona de almacenamiento (opcional)'
+    },
+
+    fecha_entrada: {
+      allowNull: false,
+      type: DataTypes.DATEONLY,
+      defaultValue: DataTypes.NOW,
+      comment: 'Fecha de ingreso al inventario (por defecto CURRENT_DATE)'
+    },
+
+    estado: {
+      allowNull: false,
+      type: DataTypes.STRING(20),
+      defaultValue: 'activo',
+      comment: "Estado del inventario (ej. 'activo', 'reservado', 'agotado')"
+    },
+
+    notas: {
+      allowNull: true,
+      type: DataTypes.TEXT,
+      comment: 'Observaciones adicionales (lote, condiciones, etc.)'
+    }
+  }, {
+    tableName: 'inventarios_productos',
+    timestamps: true,
+    createdAt: 'fecha_creacion',
+    updatedAt: 'fecha_actualizacion',
+    comment: 'Inventarios por producto terminado',
+    indexes: [
+      { fields: ['id_producto'], name: 'idx_inventarios_id_producto' }
+    ]
+  });
+};

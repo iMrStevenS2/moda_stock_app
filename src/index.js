@@ -3,10 +3,14 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { config } from './config/config.js';
 import sequelize from './config/database.js';
-import './models/index_models.js'; // inicializa modelos (no debe llamar a sync si vas a controlarlo aquí)
+import './models/index_models.js';
 import authRoutes from './routes/auth.routes.js';
 import userManagerRoutes from './routes/userManager.routes.js';
-import errorHandler from './middlewares/error.middleware.js'; // crea si no existe
+import usuariosRoutes from './routes/usuarios.routes.js';
+import { verifyToken } from './middlewares/auth.middleware.js';
+import errorHandler from './middlewares/error.middleware.js';
+import { initializeDatabase } from './models/index_models.js';
+
 
 const app = express();
 const port = config.port ?? process.env.PORT ?? 3000;
@@ -18,7 +22,10 @@ app.use(morgan('dev'));
 
 // Rutas
 app.use('/auth', authRoutes);
-app.use('/users', userManagerRoutes);
+app.use('/usersManager', userManagerRoutes);
+app.use('/usuarios', verifyToken, usuariosRoutes); 
+//router.use('/clientes', verifyToken, clientesRoutes);
+//router.use('/proveedores', verifyToken, proveedoresRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
@@ -30,30 +37,47 @@ app.get('/', (req, res) => {
 });
 
 // Control de sincronización de la BD (opcional)
-// Variables: DB_SYNC=true|false, DB_SYNC_ALTER=true|false, DB_SYNC_LOG=true|false
 const enableSync = (config.dbSync ?? process.env.DB_SYNC) === 'true';
 const syncAlter = (config.dbSyncAlter ?? process.env.DB_SYNC_ALTER) === 'true';
 const syncLog = (config.dbSyncLog ?? process.env.DB_SYNC_LOG) === 'true';
+const seedRequested = (process.env.DB_SEED === 'true');
 
-app.use(errorHandler); // debe ir después de las rutas
-
-app.listen(port, async () => {
+async function start() {
   try {
     await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
+    console.log('Conexión BD OK');
 
+    // Si se solicita sincronizar, hacer sync y seed en una sola operación
     if (enableSync) {
       console.log(`🔁 Running sequelize.sync() (alter=${syncAlter}) — logging: ${syncLog}`);
-      await sequelize.sync({ alter: syncAlter, logging: syncLog ? console.log : false });
+      await initializeDatabase({
+        sync: true,
+        seed: seedRequested,
+        syncOptions: { alter: syncAlter, logging: syncLog ? console.log : false }
+      });
       console.log('✅ Database synchronized.');
+    } else if (seedRequested) {
+      // solo seed sin sync
+      console.log('🔁 Ejecutando seed (sin sync)');
+      await initializeDatabase({ sync: false, seed: true });
+      console.log('✅ Seeds aplicados.');
     } else {
-      console.log('ℹ️ Database sync disabled (DB_SYNC=false).');
+      console.log('ℹ️ Database sync/seed omitidos (control externo o producción).');
     }
 
-    console.log(`🚀 Server running on port: ${port}`);
-    console.log(`📍 Environment: ${config.env}`);
-  } catch (error) {
-    console.error('❌ Unable to connect to the database:', error);
+    app.use(errorHandler); // debe ir después de las rutas
+
+    app.listen(port, () => {
+      console.log(`🚀 Server running on port: ${port}`);
+      console.log(`📍 Environment: ${config.env}`);
+    });
+
+    // Mensaje adicional para compatibilidad con logs previos
+    console.log('✅ Database connection established successfully.');
+  } catch (err) {
+    console.error('❌ Unable to start application:', err);
     process.exit(1);
   }
-});
+}
+
+start();

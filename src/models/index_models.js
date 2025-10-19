@@ -5,23 +5,29 @@ import sequelize from '../config/database.js';
 import { ClienteModel } from './cliente.model.js';
 import { UsuarioModel } from './usuario.model.js';
 import { ProveedorModel } from './proveedor.model.js';
-import { ProductoModel } from './producto.model.js';
+import { ProductosCodificacionModel } from './productosCodificacion.model.js';
 import { InventarioProductoModel } from './inventarioProducto.model.js';
 import { InventarioMovimientoModel } from './inventarioMovimiento.model.js';
 import { PedidoModel } from './pedido.model.js';
 import { DetallePedidoModel } from './detallePedido.model.js';
 import { AbonoPedidoModel } from './abonoPedido.model.js';
+import { RolesUsuarioModel } from './roles.model.js';
+import { EstadoPedidoModel } from './pedidoEstadoModel.js';
+import { runDefaultData } from '../config/run-default-data.js';
 
 // Initialize models
 export const Cliente = ClienteModel(sequelize, Sequelize);
 export const Usuario = UsuarioModel(sequelize, Sequelize);
 export const Proveedor = ProveedorModel(sequelize, Sequelize);
-export const Producto = ProductoModel(sequelize, Sequelize);
+export const ProductosCodificacion = ProductosCodificacionModel(sequelize, Sequelize);
 export const InventarioProducto = InventarioProductoModel(sequelize, Sequelize);
 export const InventarioMovimiento = InventarioMovimientoModel(sequelize, Sequelize);
 export const Pedido = PedidoModel(sequelize, Sequelize);
 export const DetallePedido = DetallePedidoModel(sequelize, Sequelize);
 export const AbonoPedido = AbonoPedidoModel(sequelize, Sequelize);
+export const Roles = RolesUsuarioModel(sequelize, Sequelize.DataTypes); 
+export const EstadoPedido = EstadoPedidoModel(sequelize, Sequelize.DataTypes);
+
 
 // Define relationships
 // Cliente relationships
@@ -44,23 +50,23 @@ Pedido.belongsTo(Cliente, {
   as: 'clienteFinal' 
 });
 
-// Producto relationships
-Producto.hasMany(InventarioProducto, { 
+// Relacion de tipos de productos e inventarios
+ProductosCodificacion.hasMany(InventarioProducto, { 
   foreignKey: 'id_producto', 
   as: 'inventarios' 
 });
-InventarioProducto.belongsTo(Producto, { 
+InventarioProducto.belongsTo(ProductosCodificacion, { 
   foreignKey: 'id_producto', 
-  as: 'producto' 
+  as: 'productosCodificacion' 
 });
 
-Producto.hasMany(DetallePedido, { 
+ProductosCodificacion.hasMany(DetallePedido, { 
   foreignKey: 'id_producto', 
   as: 'detallesPedido' 
 });
-DetallePedido.belongsTo(Producto, { 
+DetallePedido.belongsTo(ProductosCodificacion, { 
   foreignKey: 'id_producto', 
-  as: 'producto' 
+  as: 'productosCodificacion' 
 });
 
 // InventarioProducto relationships
@@ -93,22 +99,59 @@ AbonoPedido.belongsTo(Pedido, {
 });
 
 // Many-to-many relationship between Producto and Pedido through DetallePedido
-Producto.belongsToMany(Pedido, { 
+ProductosCodificacion.belongsToMany(Pedido, { 
   through: DetallePedido, 
   foreignKey: 'id_producto', 
   otherKey: 'id_pedido',
   as: 'pedidos' 
 });
-Pedido.belongsToMany(Producto, { 
+Pedido.belongsToMany(ProductosCodificacion, { 
   through: DetallePedido, 
   foreignKey: 'id_pedido', 
   otherKey: 'id_producto',
-  as: 'productos' 
+  as: 'productos_codificacion' 
 });
 
-// Sync database (only in development)
-if (process.env.NODE_ENV === 'development') {
-  sequelize.sync({ alter: false });
+// Asociaciones: Usuario -> RolesTipos muchos a uno
+Usuario.belongsTo(Roles, {
+  foreignKey: 'id_rol',
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE',
+  constraints: true
+});
+Roles.hasMany(Usuario, {
+  foreignKey: 'id_rol',
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE',
+  constraints: true
+});
+
+///Pedido -> EstadoPedido (many-to-one)
+Pedido.belongsTo(EstadoPedido, {
+  foreignKey: 'id_estado',
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE',
+  constraints: true
+});
+EstadoPedido.hasMany(Pedido, { foreignKey: 'id_estado' });
+
+
+// // Sync database (only in development)
+// if (process.env.NODE_ENV === 'development') {
+//   sequelize.sync({ alter: false });
+// }
+
+export async function initializeDatabase({ sync = false, seed = false, syncOptions = { alter: true } } = {}) {
+  if (sync) {
+    console.log('[db init] sincronizando esquema (sequelize.sync) con options:', syncOptions);
+    await sequelize.sync(syncOptions);
+    console.log('[db init] sincronización completada');
+  }
+  if (seed) {
+    console.log('[db init] aplicando default data (seed)');
+    await runDefaultData();
+  }
 }
 
 export default sequelize;
+

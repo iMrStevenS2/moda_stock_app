@@ -1,6 +1,6 @@
 export const ClienteModel = (connection, DataTypes) => {
     return connection.define('Cliente', {
-      id: {
+      id_cliente: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,

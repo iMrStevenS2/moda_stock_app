@@ -1,6 +1,6 @@
 export const ProveedorModel = (connection, DataTypes) => {
     return connection.define('Proveedor', {
-      id: {
+      id_proveedor: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,

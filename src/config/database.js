@@ -1,14 +1,15 @@
-import { Sequelize } from 'sequelize';
+import SequelizePkg from 'sequelize';
+const Sequelize = SequelizePkg?.Sequelize ?? SequelizePkg;
 import { config } from './config.js';
 
 const sequelize = new Sequelize(
-  config.dbName,
-  config.dbUser,
-  config.dbPassword,
+  String(config.dbName ?? ''),
+  String(config.dbUser ?? ''),
+  config.dbPassword == null || config.dbPassword === '' ? null : String(config.dbPassword),
   {
-    host: config.dbHost,
-    port: config.dbPort,
-    dialect: 'postgres',
+    host: String(config.dbHost ?? 'localhost'),
+    port: config.dbPort ? Number(config.dbPort) : 5432,
+    dialect: config.dbDialect ?? 'postgres',
     logging: config.env === 'development' ? console.log : false,
     pool: {
       max: 5,

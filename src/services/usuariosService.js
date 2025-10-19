@@ -1,7 +1,15 @@
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import { Usuario } from '../models/index_models.js';
-import { SECURITY_CONFIG } from '../config/security.js';
+
+const hashearPassword = async (password) => {
+  if (!process.env.BCRYPT_ROUNDS) {
+    throw new Error('CONFIGURACION_FALTANTE');
+  }
+  const rounds = parseInt(process.env.BCRYPT_ROUNDS, 10);
+  return await bcrypt.hash(password, rounds);
+};
+
 
 export const crear = async (datos) => {
   // Validación de campos requeridos
@@ -36,8 +44,7 @@ export const crear = async (datos) => {
   if (existente) throw new Error('USUARIO_EXISTE');
 
   // Crear usuario
-  const hash = await bcrypt.hash(datos.password, SECURITY_CONFIG.BCRYPT_ROUNDS);
-
+  const hash = await hashearPassword(datos.password);
 
   const creado = await Usuario.create({
     usuario: datos.usuario,
@@ -117,8 +124,8 @@ export const actualizar = async (id, cambios) => {
   if (!usuario) throw new Error('USUARIO_NO_ENCONTRADO');
 
   if (cambios.password) {
-    const hash = await bcrypt.hash(cambios.password, SECURITY_CONFIG.BCRYPT_ROUNDS);
-    cambios.contrasena = hash;
+    // Usar la misma función centralizada
+    cambios.contrasena = await hashearPassword(cambios.password);
     delete cambios.password;
   }
 

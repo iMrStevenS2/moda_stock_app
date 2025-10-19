@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import { Usuario } from '../models/index_models.js';
+import { SECURITY_CONFIG } from '../config/security.js';
 
 export const crear = async (datos) => {
   // Validación de campos requeridos
@@ -35,8 +36,8 @@ export const crear = async (datos) => {
   if (existente) throw new Error('USUARIO_EXISTE');
 
   // Crear usuario
-  const rounds = parseInt(process.env.BCRYPT_ROUNDS ?? '10', 10);
-  const hash = await bcrypt.hash(datos.password, rounds);
+  const hash = await bcrypt.hash(datos.password, SECURITY_CONFIG.BCRYPT_ROUNDS);
+
 
   const creado = await Usuario.create({
     usuario: datos.usuario,
@@ -116,8 +117,8 @@ export const actualizar = async (id, cambios) => {
   if (!usuario) throw new Error('USUARIO_NO_ENCONTRADO');
 
   if (cambios.password) {
-    const rounds = parseInt(process.env.BCRYPT_ROUNDS ?? '10', 10);
-    cambios.contrasena = await bcrypt.hash(cambios.password, rounds);
+    const hash = await bcrypt.hash(cambios.password, SECURITY_CONFIG.BCRYPT_ROUNDS);
+    cambios.contrasena = hash;
     delete cambios.password;
   }
 

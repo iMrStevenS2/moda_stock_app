@@ -1,55 +1,24 @@
 
 PROBANDO CREACION DE USUARIO
+http://localhost:3000/usersManager/usuarios?ContentType=application/json
 
-en bash
-curl -i -X POST http://localhost:3000/usersManagerr \
-  -H "Content-Type: application/json" \
-  -d '{
-    "usuario":"admin",
-    "password":"AdminPass123!",
-    "primer_nombre":"Admin",
-    "primer_apellido":"Root",
-    "tipo_documento":"CC",
-    "numero_documento":"0001",
-    "correo":"admin@example.com",
-    "rol":"admin",
-    "tipoUsuario":"sistema"
-  }'
+{
+    "usuario": "juanpf",
+    "password": "MiPassSeguro123!",
+    "primer_nombre": "Juan",
+    "primer_apellido": "Pérez",
+    "tipo_documento": "CC",
+    "numero_documento": "12345665789",
+    "email": "juans.perez@example.com",
+    "id_rol": 3
+}
 
 
-en powershell
-Invoke-RestMethod -Uri http://localhost:3000/usersManager -Method Post -ContentType 'application/json' -Body '{
-  "usuario":"admin",
-  "password":"AdminPass123!",
-  "primer_nombre":"Admin",
-  "primer_apellido":"Root",
-  "tipo_documento":"CC",
-  "numero_documento":"0001",
-  "correo":"admin@example.com",
-  "id_rol":"3",
-  "tipoUsuario":"sistema"
-}'
+buscar un usuario
 
+http://localhost:3000/usersManager/usuarios/buscar?estado=0
 
-PROBANDO GENERACION DE JWT
-bash
-
-resp=$(curl -s -X POST http://localhost:3000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"identificador":"admin","contrasena":"AdminPass123!"}')
-echo "$resp"          # ver respuesta completa
-token=$(echo "$resp" | jq -r .token)
-echo "TOKEN: $token"
-
-powershell
-
-$resp = Invoke-RestMethod -Uri http://localhost:3000/auth/login -Method Post -ContentType 'application/json' -Body '{"identificador":"admin","contrasena":"AdminPass123!"}'
-$token = $resp.token
-$token
-
-llamada usando el enpoint protegido
-
-bash
-curl -i -H "Authorization: Bearer $token" http://localhost:3000/users
-powershell
-Invoke-RestMethod -Uri http://localhost:3000/users -Headers @{ Authorization = "Bearer $token" } -Method Get
+por tipo+tipo_documento
+por nombre 
+por id
+Por estado

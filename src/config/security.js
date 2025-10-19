@@ -1,0 +1,5 @@
+export const SECURITY_CONFIG = {
+  BCRYPT_ROUNDS: parseInt(process.env.BCRYPT_ROUNDS ?? '10', 10),
+  PASSWORD_MIN_LENGTH: 8,
+  PASSWORD_MAX_LENGTH: 100
+};

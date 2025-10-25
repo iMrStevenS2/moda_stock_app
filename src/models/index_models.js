@@ -115,12 +115,14 @@ Pedido.belongsToMany(ProductosCodificacion, {
 // Asociaciones: Usuario -> RolesTipos muchos a uno
 Usuario.belongsTo(Roles, {
   foreignKey: 'id_rol',
+  as: 'rol',
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE',
   constraints: true
 });
 Roles.hasMany(Usuario, {
   foreignKey: 'id_rol',
+  as: 'usuarios',
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE',
   constraints: true

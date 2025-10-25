@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
-import { Usuario } from '../models/index_models.js';
+import { Usuario, Roles } from '../models/index_models.js';
 
 const hashearPassword = async (password) => {
   const rounds = parseInt(process.env.BCRYPT_ROUNDS || '10', 10);
@@ -65,6 +65,11 @@ export const crear = async (datos) => {
 export const listarTodosUsuarios = async () => {
   const usuarios = await Usuario.findAll({
     attributes: { exclude: ['contrasena'] },
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }],
     order: [['fecha_creacion', 'DESC']] // Ordenados por fecha de creación
   });
 
@@ -74,7 +79,12 @@ export const listarTodosUsuarios = async () => {
 export const buscarPorDocumento = async (tipo_documento, numero_documento) => {
   const usuario = await Usuario.findOne({
     where: { tipo_documento, numero_documento },
-    attributes: { exclude: ['contrasena'] }
+    attributes: { exclude: ['contrasena'] },
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }]
   });
   return usuario ? usuario.toJSON() : null;
 };
@@ -91,7 +101,12 @@ export const buscarPorNombre = async (texto) => {
         { segundo_apellido: { [Op.iLike]: `%${texto}%` } }
       ]
     },
-    attributes: { exclude: ['contrasena'] }
+    attributes: { exclude: ['contrasena'] },
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }]
   });
 
   return usuarios.length > 0 ? usuarios.map(u => u.toJSON()) : null;
@@ -103,6 +118,11 @@ export const filtrarPorEstado = async (estado) => {
   const usuarios = await Usuario.findAll({
     where: { estado },
     attributes: { exclude: ['contrasena'] },
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }],
     order: [['primer_nombre', 'ASC'], ['primer_apellido', 'ASC']]
   });
 
@@ -111,13 +131,24 @@ export const filtrarPorEstado = async (estado) => {
 
 export const obtenerPorId = async (id) => {
   const usuario = await Usuario.findByPk(id, {
-    attributes: { exclude: ['contrasena'] }
+    attributes: { exclude: ['contrasena'] },
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }]
   });
   return usuario ? usuario.toJSON() : null;
 };
 
 export const actualizar = async (id, cambios) => {
-  const usuario = await Usuario.findByPk(id);
+  const usuario = await Usuario.findByPk(id, {
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }]
+  });
   if (!usuario) throw new Error('USUARIO_NO_ENCONTRADO');
 
   if (cambios.password) {
@@ -135,7 +166,13 @@ export const actualizar = async (id, cambios) => {
 };
 
 export const cambiarEstado = async (id, estado) => {
-  const usuario = await Usuario.findByPk(id);
+  const usuario = await Usuario.findByPk(id, {
+    include: [{
+      model: Roles,
+      as: 'rol',
+      attributes: ['id_rol', 'nombre', 'descripcion']
+    }]
+  });
   if (!usuario) throw new Error('USUARIO_NO_ENCONTRADO');
 
   const nuevoEstado = estado === 'true' || estado === '1' ? 1 : 0;

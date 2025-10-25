@@ -5,6 +5,7 @@ import { config } from './config/config.js';
 import sequelize from './config/database.js';
 import './models/index_models.js';
 import authRoutes from './routes/auth.routes.js';
+import publicRoutes from './routes/public.routes.js';
 import userManagerRoutes from './routes/userManager.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
@@ -20,8 +21,11 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Rutas
+// Rutas públicas (sin autenticación)
 app.use('/auth', authRoutes);
+app.use('/public', publicRoutes);
+
+// Rutas protegidas (requieren autenticación)
 app.use('/usersManager', userManagerRoutes);
 app.use('/usuarios', verifyToken, usuariosRoutes); 
 //router.use('/clientes', verifyToken, clientesRoutes);

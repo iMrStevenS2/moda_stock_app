@@ -3,10 +3,7 @@ import { Op } from 'sequelize';
 import { Usuario } from '../models/index_models.js';
 
 const hashearPassword = async (password) => {
-  if (!process.env.BCRYPT_ROUNDS) {
-    throw new Error('CONFIGURACION_FALTANTE');
-  }
-  const rounds = parseInt(process.env.BCRYPT_ROUNDS, 10);
+  const rounds = parseInt(process.env.BCRYPT_ROUNDS || '10', 10);
   return await bcrypt.hash(password, rounds);
 };
 

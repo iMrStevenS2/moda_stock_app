@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/', usuariosController.crearUsuario);
 router.get('/', usuariosController.listarUsuarios);
 router.get('/buscar', usuariosController.buscarUsuarios); // Ruta de búsqueda antes de /:id
+router.get('/buscar', usuariosController.filtrarYBuscarUsuarios); // Ruta de búsqueda
 
 // Rutas con parámetros después
 router.get('/:id', usuariosController.obtenerUsuario);

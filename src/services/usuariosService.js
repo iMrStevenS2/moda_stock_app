@@ -8,12 +8,63 @@ const hashearPassword = async (password) => {
 };
 
 
+
+export const buscarUsuarios = async (criterios) => {
+  const where = {};
+  const include = [{
+    // Asegúrate de que Roles y el alias 'rol' sean correctos según tu configuración de Sequelize
+    model: Roles,
+    as: 'rol',
+    attributes: ['id_rol', 'nombre', 'descripcion']
+  }];
+
+  // 1. Búsqueda por documento (tipo_documento y numero_documento)
+  if (criterios.tipo_documento && criterios.numero_documento) {
+    where.tipo_documento = criterios.tipo_documento;
+    where.numero_documento = criterios.numero_documento;
+  }
+
+  // 2. Búsqueda por nombre (ILIKE en varios campos)
+  if (criterios.nombre_apellido) {
+    const busqueda = `%${criterios.nombre_apellido}%`;
+
+    // Cláusula OR para buscar coincidencias en cualquiera de los campos de nombre
+    where[Op.or] = [
+      { primer_nombre: { [Op.iLike]: busqueda } },
+      { segundo_nombre: { [Op.iLike]: busqueda } },
+      { primer_apellido: { [Op.iLike]: busqueda } },
+      { segundo_apellido: { [Op.iLike]: busqueda } }
+    ];
+  }
+
+  // 3. Filtro por estado (Si se proporciona)
+  if (criterios.estado !== undefined) {
+    where.estado = criterios.estado;
+  }
+
+  // Si no hay criterios de búsqueda válidos, devolvemos un array vacío
+  if (Object.keys(where).length === 0) {
+    return [];
+  }
+
+  // Ejecuta la consulta
+  const usuarios = await Usuario.findAll({
+    where: where,
+    attributes: { exclude: ['contrasena'] },
+    include: include,
+    order: [['primer_apellido', 'ASC']]
+  });
+
+  return usuarios.map(u => u.toJSON());
+};
+
+
 export const crear = async (datos) => {
   // Validación de campos requeridos
   const camposFaltantes = [];
-  const requeridos = ['usuario', 'password', 'primer_nombre', 'primer_apellido', 
-                      'tipo_documento', 'numero_documento', 'email', 'id_rol'];
-  
+  const requeridos = ['usuario', 'password', 'primer_nombre', 'primer_apellido',
+    'tipo_documento', 'numero_documento', 'email', 'id_rol'];
+
   requeridos.forEach(campo => {
     if (!datos[campo]) camposFaltantes.push(campo);
   });
@@ -28,7 +79,7 @@ export const crear = async (datos) => {
       [Op.or]: [
         { usuario: datos.usuario },
         { correo: datos.email },
-        { 
+        {
           [Op.and]: [
             { tipo_documento: datos.tipo_documento },
             { numero_documento: datos.numero_documento }

@@ -1,5 +1,31 @@
 import * as usuariosService from '../services/usuariosService.js';
 
+
+export const filtrarYBuscarUsuarios = async (req, res, next) => {
+  try {
+    // Captura todos los posibles parámetros de búsqueda desde la URL
+    const { tipo_documento, numero_documento, nombre_apellido, estado } = req.query;
+
+    const criteriosBusqueda = {
+      tipo_documento,
+      numero_documento,
+      nombre_apellido,
+      estado: estado !== undefined ? parseInt(estado, 10) : undefined
+    };
+
+    // Llama al servicio unificado 'buscarUsuarios' (que está en usuariosService.js)
+    const usuarios = await usuariosService.buscarUsuarios(criteriosBusqueda);
+
+    res.json({
+      total: usuarios.length,
+      usuarios: usuarios
+    });
+
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const crearUsuario = async (req, res, next) => {
   try {
     const usuario = await usuariosService.crear(req.body);
@@ -18,7 +44,7 @@ export const crearUsuario = async (req, res, next) => {
 export const listarUsuarios = async (req, res, next) => {
   try {
     const usuarios = await usuariosService.listarTodosUsuarios();
-    
+
     res.json({
       total: usuarios.length,
       usuarios: usuarios

@@ -4,14 +4,14 @@ import * as clientesController from '../controllers/clientesController.js';
 const router = express.Router();
 
 // Rutas sin parámetros primero
-router.post('/', clientesController.crearCliente);
-router.get('/', clientesController.listarClientes);
-router.get('/buscar', clientesController.buscarClientes); // Ruta de búsqueda antes de /:id
+router.post('/crear', clientesController.crearCliente);
+router.get('/listar', clientesController.listarClientes);
+router.get('/buscarCliente', clientesController.buscarClientes);
 
-// Rutas con parámetros después
-router.get('/:id', clientesController.obtenerCliente);
-router.put('/:id', clientesController.actualizarCliente);
-router.patch('/:id/estado', clientesController.cambiarEstadoCliente);
-router.delete('/:id', clientesController.eliminarCliente);
+// Rutas con parámetros después id para indicar lo que se busca
+router.get('/obtenerPorID/:id', clientesController.obtenerClientePorID);
+router.put('/actualizar/:id', clientesController.actualizarCliente);
+router.patch('/:id/cambiarEstado', clientesController.cambiarEstadoCliente);
+router.delete('/:id', clientesController.eliminarCliente);// no se implementara aun
 
 export default router;

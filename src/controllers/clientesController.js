@@ -87,22 +87,17 @@ export const buscarClientes = async (req, res, next) => {
   }
 };
 
-export const obtenerCliente = async (req, res, next) => {
+// se ajusta funcion para obtener cliente por ID y se quita la busqueda por tipo y numero de documento
+// que ahora se realiza en la funcion buscarClientes
+export const obtenerClientePorID = async (req, res, next) => {
   try {
-    let identificador = req.params.id;
+    // Obtener únicamente por id (params).
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: 'Se requiere id en la ruta' });
 
-    // Si vienen parámetros de documento en query
-    if (req.query.tipo_documento && req.query.numero_documento) {
-      identificador = {
-        tipo_documento: req.query.tipo_documento,
-        numero_documento: req.query.numero_documento
-      };
-    }
+    const cliente = await clientesService.obtenerPorId(id);
+    if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
 
-    const cliente = await clientesService.obtenerPorId(identificador);
-    if (!cliente) {
-      return res.status(404).json({ message: 'Cliente no encontrado' });
-    }
     res.json(cliente);
   } catch (err) {
     next(err);

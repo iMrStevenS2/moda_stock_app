@@ -18,7 +18,7 @@ export const crearCliente = async (req, res, next) => {
 export const listarClientes = async (req, res, next) => {
   try {
     const clientes = await clientesService.listarTodosClientes();
-    
+
     res.json({
       total: clientes.length,
       clientes: clientes

@@ -1,0 +1,1104 @@
+{
+	"info": {
+		"_postman_id": "cd66c7bd-4325-4127-96a9-b8f3266b43a7",
+		"name": "modaStockApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38665929"
+	},
+	"item": [
+		{
+			"name": "GestionUsuarios",
+			"item": [
+				{
+					"name": "UsuariosSistema",
+					"item": [
+						{
+							"name": "CrearUsuarioSistema",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\": \"admin\",\r\n    \"password\": \"123456\",\r\n    \"primer_nombre\": \"Juan\",\r\n    \"primer_apellido\": \"Pérez\",\r\n    \"tipo_documento\": \"CC\",\r\n    \"numero_documento\": \"123\",\r\n    \"email\": \"admin@admin.com\",\r\n    \"id_rol\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/usersManager/usuarios?ContentType=application/json",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"usersManager",
+										"usuarios"
+									],
+									"query": [
+										{
+											"key": "ContentType",
+											"value": "application/json"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ListarUSuarios",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/usersManager/usuarios",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"usersManager",
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BuscarUsuario",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/usersManager/usuarios/buscar?tipo_documento=CC&numero_documento=12345678",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"usersManager",
+										"usuarios",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "tipo_documento",
+											"value": "CC"
+										},
+										{
+											"key": "numero_documento",
+											"value": "12345678"
+										},
+										{
+											"key": "email",
+											"value": "admin@sistema.com",
+											"disabled": true
+										},
+										{
+											"key": "nombre",
+											"value": "jua",
+											"disabled": true
+										},
+										{
+											"key": "vacio",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "estado",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "estado",
+											"value": "0",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clientes",
+					"item": [
+						{
+							"name": "CrearClientes",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"tipo_documento\": \"CC\",\r\n  \"numero_documento\": \"12345678\",\r\n  \"nombre\": \"Juan Pérez\",\r\n  \"email\": \"juan@example.com\",\r\n  \"telefono\": \"3001112222\",\r\n  \"direccion\": \"Calle 1 #2-3\",\r\n  \"ciudad\": \"Cali\",\r\n  \"departamento\": \"Valle\",\r\n  \"pais\": \"Colombia\",\r\n  \"estado\": 1,\r\n  \"notas\": \"Cliente VIP\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/clientes/crear",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"crear"
+									],
+									"query": [
+										{
+											"key": "ContentType",
+											"value": "application/json",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ListarClientes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/clientes/listar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BuscarCliente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/clientes/buscarCliente/?nombre=co",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"buscarCliente",
+										""
+									],
+									"query": [
+										{
+											"key": "numero_documento",
+											"value": "12345678",
+											"disabled": true
+										},
+										{
+											"key": "tipo_documento",
+											"value": "CC",
+											"disabled": true
+										},
+										{
+											"key": "nombre",
+											"value": "co"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FiltrarporEstado",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/clientes/buscarCliente?estado=0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"buscarCliente"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"tipo_documento\": \"CC\",\r\n  \"numero_documento\": \"3\",\r\n  \"nombre\": \"cocote\",\r\n  \"email\": \"juan@example.com\",\r\n  \"telefono\": \"3001112222\",\r\n  \"direccion\": \"Calle 1 #2-3\",\r\n  \"ciudad\": \"Cali\",\r\n  \"departamento\": \"Valle\",\r\n  \"pais\": \"Colombia\",\r\n  \"estado\": 1,\r\n  \"notas\": \"Cliente VIP\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/clientes/actualizar/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"actualizar",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CambiarEstado",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/clientes/cambiarEstado/1/?estado=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"cambiarEstado",
+										"1",
+										""
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "obtenerClientePorId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/clientes/obtenerPorID/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"obtenerPorID",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Proveedores",
+					"item": [
+						{
+							"name": "CrearProveedor",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"tipo_documento\": \"NIT\",\r\n  \"numero_documento\": \"900123456-7\",\r\n  \"razon_social\": \"Proveedor Ejemplo S.A.S.\",\r\n  \"nombre_contacto\": \"María Pérez\",\r\n  \"email_contacto\": \"contacto@proveedorejemplo.com\",\r\n  \"telefono_contacto\": \"3175551234\",\r\n  \"direccion\": \"Av. Principal #100\",\r\n  \"ciudad\": \"Cali\",\r\n  \"departamento\": \"Valle\",\r\n  \"pais\": \"Colombia\",\r\n  \"estado\": 1,\r\n  \"notas\": \"Proveedor preferente\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/proveedores/crear",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"proveedores",
+										"crear"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ListarProveedores",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/proveedores/listar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"proveedores",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BuscarProveedor",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/proveedores/buscarProveedor?razon_social=ejem",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"proveedores",
+										"buscarProveedor"
+									],
+									"query": [
+										{
+											"key": "tipo_documento",
+											"value": "NIT",
+											"disabled": true
+										},
+										{
+											"key": "numero_documento",
+											"value": "900123456-7",
+											"disabled": true
+										},
+										{
+											"key": "razon_social",
+											"value": "ejem"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FiltrarporEstado",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/proveedores/buscarProveedor?estado=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"proveedores",
+										"buscarProveedor"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"razon_social\": \"Proveedor Ejemplo S.A.S. - Actualizado\",\r\n  \"nombre_contacto\": \"María G. Pérez\",\r\n  \"email_contacto\": \"nuevo.contacto@proveedorejemplo.com\",\r\n  \"telefono_contacto\": \"3175559999\",\r\n  \"direccion\": \"Calle Secundaria #50\",\r\n  \"notas\": \"Actualización de datos\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/proveedores/actualizar/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"proveedores",
+										"actualizar",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CambiarEstado",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/clientes/cambiarEstado/1?estado=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"clientes",
+										"cambiarEstado",
+										"1"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "obtenerProveedorPorID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/proveedores/obtenerPorID/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"proveedores",
+										"obtenerPorID",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GestionInventarios",
+			"item": [
+				{
+					"name": "insumos",
+					"item": [
+						{
+							"name": "GestionCatalogo",
+							"item": []
+						},
+						{
+							"name": "GestionInsumosproveedor",
+							"item": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GestionCompras",
+			"item": [
+				{
+					"name": "Insumos Catalogo",
+					"item": [
+						{
+							"name": "Listar insumos (GET)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/catalogo/listar",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"catalogo",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener insumo por id (GET)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/catalogo/obtener/{{id}}",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"catalogo",
+										"obtener",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear insumo (POST)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"codigo_insumo\": \"INS-001\",\n  \"nombre_insumo\": \"Tela Algodón\",\n  \"tipo_insumo\": \"material\",\n  \"unidad_medida\": \"m\",\n  \"descripcion\": \"Tela de algodón 100%\",\n  \"estado\": \"activo\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}insumos/catalogo/crear",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"catalogo",
+										"crear"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar insumo (PUT)",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nombre_insumo\": \"Tela Algodón Premium\",\n  \"descripcion\": \"Mejor calidad\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}insumos/catalogo/actualizar/{{id}}",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"catalogo",
+										"actualizar",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cambiar estado (PATCH)",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/catalogo/cambiarEstado/{{id}}?estado=1",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"catalogo",
+										"cambiarEstado",
+										"{{id}}"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminar insumo (DELETE)",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/catalogo/eliminar/{{id}}",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"catalogo",
+										"eliminar",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Insumos Proveedor",
+					"item": [
+						{
+							"name": "Listar vinculos (GET)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/proveedor/listar",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"proveedor",
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener vínculo por id (GET)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/proveedor/obtener/{{id}}",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"proveedor",
+										"obtener",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear vínculo (POST)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_insumo\": 1,\n  \"id_proveedor\": 1,\n  \"precio_unitario\": 12000,\n  \"condiciones_pago\": \"30 dias\",\n  \"estado\": \"activo\",\n  \"notas\": \"Precio inicial\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}insumos/proveedor/crear",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"proveedor",
+										"crear"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar vínculo (PUT)",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"precio_unitario\": 13000,\n  \"condiciones_pago\": \"45 dias\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}insumos/proveedor/actualizar/{{id}}",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"proveedor",
+										"actualizar",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cambiar estado vínculo (PATCH)",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/proveedor/cambiarEstado/{{id}}?estado=0",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"proveedor",
+										"cambiarEstado",
+										"{{id}}"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminar vínculo (DELETE)",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}insumos/proveedor/eliminar/{{id}}",
+									"host": [
+										"{{baseUrl}}insumos"
+									],
+									"path": [
+										"proveedor",
+										"eliminar",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Productos Codificación",
+					"item": [
+						{
+							"name": "Listar productos (GET)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}productos/listar",
+									"host": [
+										"{{baseUrl}}productos"
+									],
+									"path": [
+										"listar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener producto por id (GET)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}productos/obtenerPorID/{{id}}",
+									"host": [
+										"{{baseUrl}}productos"
+									],
+									"path": [
+										"obtenerPorID",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear producto (POST)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"codigo\": \"P-001\",\n  \"descripcion\": \"Producto de prueba\",\n  \"estado\": 1\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}productos/crear",
+									"host": [
+										"{{baseUrl}}productos"
+									],
+									"path": [
+										"crear"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar producto (PUT)",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"descripcion\": \"Actualizado\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}productos/actualizar/{{id}}",
+									"host": [
+										"{{baseUrl}}productos"
+									],
+									"path": [
+										"actualizar",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cambiar estado producto (PATCH)",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}productos/cambiarEstado/{{id}}?estado=0",
+									"host": [
+										"{{baseUrl}}productos"
+									],
+									"path": [
+										"cambiarEstado",
+										"{{id}}"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminar producto (DELETE)",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}productos/eliminar/{{id}}",
+									"host": [
+										"{{baseUrl}}productos"
+									],
+									"path": [
+										"eliminar",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "tokenAuth",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"usuario\":\"superadmin\",\r\n     \"password\":\"super\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/login?ContentType=application/json",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "ContentType",
+							"value": "application/json"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		}
+	]
+}

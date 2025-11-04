@@ -9,6 +9,7 @@ import publicRoutes from './routes/public.routes.js';
 import userManagerRoutes from './routes/userManager.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import clientesRoutes from './routes/clientes.routes.js';
+import proveedoresRoutes from './routes/proveedores.routes.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
 import errorHandler from './middlewares/error.middleware.js';
 import { initializeDatabase } from './models/index_models.js';
@@ -30,6 +31,7 @@ app.use('/public', publicRoutes);
 app.use('/usersManager', userManagerRoutes);
 app.use('/usuarios', verifyToken, usuariosRoutes);
 app.use('/clientes', verifyToken, clientesRoutes);
+app.use('/proveedores', verifyToken, proveedoresRoutes);
 //router.use('/clientes', verifyToken, clientesRoutes);
 //router.use('/proveedores', verifyToken, proveedoresRoutes);
 

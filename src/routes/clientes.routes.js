@@ -11,7 +11,7 @@ router.get('/buscarCliente', clientesController.buscarClientes);
 // Rutas con parámetros después id para indicar lo que se busca
 router.get('/obtenerPorID/:id', clientesController.obtenerClientePorID);
 router.put('/actualizar/:id', clientesController.actualizarCliente);
-router.patch('/:id/cambiarEstado', clientesController.cambiarEstadoCliente);
-router.delete('/:id', clientesController.eliminarCliente);// no se implementara aun
+router.patch('/cambiarEstado/:id', clientesController.cambiarEstadoCliente);
+router.delete('/eliminar/:id', clientesController.eliminarCliente);// no se implementara aun
 
 export default router;

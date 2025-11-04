@@ -1,5 +1,5 @@
 import express from 'express';
-import * as insumosCtrl from '../controllers/insumosController.js';
+import * as insumosCtrl from '../controllers/insumosCatalogoController.js';
 import * as provCtrl from '../controllers/insumosProveedorController.js';
 
 const router = express.Router();

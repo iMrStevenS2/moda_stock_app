@@ -1,4 +1,4 @@
-import * as insumosService from '../services/insumosService.js';
+import * as insumosService from '../services/insumosCatalogoService.js';
 
 export const crearInsumo = async (req, res, next) => {
   try {

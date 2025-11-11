@@ -12,6 +12,7 @@ import clientesRoutes from './routes/clientes.routes.js';
 import proveedoresRoutes from './routes/proveedores.routes.js';
 import productosRoutes from './routes/productosCodificacion.routes.js';
 import insumosRoutes from './routes/insumos.routes.js';
+import pedidosRoutes from './routes/pedidos.routes.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
 import errorHandler from './middlewares/error.middleware.js';
 import { initializeDatabase } from './models/index_models.js';
@@ -36,6 +37,7 @@ app.use('/clientes', verifyToken, clientesRoutes);
 app.use('/proveedores', verifyToken, proveedoresRoutes);
 app.use('/productos', verifyToken, productosRoutes);
 app.use('/insumos', verifyToken, insumosRoutes);
+app.use('/pedidos', verifyToken, pedidosRoutes);
 //router.use('/clientes', verifyToken, clientesRoutes);
 //router.use('/proveedores', verifyToken, proveedoresRoutes);
 

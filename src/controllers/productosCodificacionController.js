@@ -11,6 +11,9 @@ export const crearProducto = async (req, res, next) => {
 		if (err.message === 'PRODUCTO_EXISTE') {
 			return res.status(409).json({ message: 'Producto ya existe' });
 		}
+		if (err.message === 'CODIGO_DUPLICADO') {
+			return res.status(409).json({ message: 'Código de producto ya existe' });
+		}
 		next(err);
 	}
 };

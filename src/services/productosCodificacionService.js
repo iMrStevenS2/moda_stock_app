@@ -14,25 +14,23 @@ export const obtenerPorId = async (id) => {
 };
 
 export const crear = async (datos) => {
-	const requeridos = ['nombre_producto', 'tipo_producto', 'precio_unitario'];
+	// codigo_producto es obligatorio para la codificación de productos
+	const requeridos = ['codigo_producto', 'nombre_producto', 'tipo_producto', 'precio_unitario'];
 	const faltantes = [];
 	requeridos.forEach(c => {
 		if (datos[c] === undefined || datos[c] === null || datos[c] === '') faltantes.push(c);
 	});
 	if (faltantes.length > 0) throw new Error('CAMPOS_FALTANTES');
 
-	// Evitar duplicados por nombre+tipo+talla+color
-	const existente = await ProductosCodificacion.findOne({
-		where: {
-			nombre_producto: datos.nombre_producto,
-			tipo_producto: datos.tipo_producto,
-			talla: datos.talla || null,
-			color: datos.color || null
-		}
-	});
-	if (existente) throw new Error('PRODUCTO_EXISTE');
+	// Nota: la unicidad se controla por `codigo_producto`.
+	// Permitimos productos con mismo nombre/tipo/talla/color siempre que el código sea distinto.
+
+	// Verificar codigo_producto provisto y no duplicado
+	const porCodigo = await ProductosCodificacion.findOne({ where: { codigo_producto: datos.codigo_producto } });
+	if (porCodigo) throw new Error('CODIGO_DUPLICADO');
 
 	const creado = await ProductosCodificacion.create({
+		codigo_producto: datos.codigo_producto,
 		nombre_producto: datos.nombre_producto,
 		tipo_producto: datos.tipo_producto,
 		talla: datos.talla,
@@ -51,23 +49,12 @@ export const actualizar = async (id, cambios) => {
 	const producto = await ProductosCodificacion.findByPk(id);
 	if (!producto) throw new Error('PRODUCTO_NO_ENCONTRADO');
 
-	// Verificar que la nueva combinación no exista en otro registro
-	if (cambios.nombre_producto || cambios.tipo_producto || cambios.talla || cambios.color) {
-		const nombre = cambios.nombre_producto || producto.nombre_producto;
-		const tipo = cambios.tipo_producto || producto.tipo_producto;
-		const talla = cambios.talla || producto.talla;
-		const color = cambios.color || producto.color;
+	// Nota: permitimos duplicar nombre/tipo/talla/color; la unicidad se controla por codigo_producto
 
-		const existe = await ProductosCodificacion.findOne({
-			where: {
-				nombre_producto: nombre,
-				tipo_producto: tipo,
-				talla,
-				color,
-				id_producto: { [Op.ne]: id }
-			}
-		});
-		if (existe) throw new Error('PRODUCTO_EXISTE');
+	// Si se intenta cambiar el codigo_producto, verificar unicidad
+	if (cambios.codigo_producto && cambios.codigo_producto !== producto.codigo_producto) {
+		const porCodigo = await ProductosCodificacion.findOne({ where: { codigo_producto: cambios.codigo_producto, id_producto: { [Op.ne]: id } } });
+		if (porCodigo) throw new Error('CODIGO_DUPLICADO');
 	}
 
 	await producto.update(cambios);

@@ -55,13 +55,16 @@ Pedido.belongsTo(Cliente, {
 });
 
 // Relacion de tipos de productos e inventarios
-ProductosCodificacion.hasMany(InventarioProducto, { 
-  foreignKey: 'id_producto', 
-  as: 'inventarios' 
+// Nota: la tabla `inventarios_productos` referencia a `productos_codificacion.codigo_producto`.
+ProductosCodificacion.hasMany(InventarioProducto, {
+  foreignKey: 'codigo_producto',
+  sourceKey: 'codigo_producto',
+  as: 'inventarios'
 });
-InventarioProducto.belongsTo(ProductosCodificacion, { 
-  foreignKey: 'id_producto', 
-  as: 'productosCodificacion' 
+InventarioProducto.belongsTo(ProductosCodificacion, {
+  foreignKey: 'codigo_producto',
+  targetKey: 'codigo_producto',
+  as: 'productosCodificacion'
 });
 
 ProductosCodificacion.hasMany(DetallePedido, { 

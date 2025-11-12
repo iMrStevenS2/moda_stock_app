@@ -8,13 +8,13 @@ export const InventarioProductoModel = (connection, DataTypes) => {
       comment: 'Identificador único del registro de inventario (SERIAL PRIMARY KEY)'
     },
 
-    id_producto: {
+    codigo_producto: {
       allowNull: false,
-      type: DataTypes.INTEGER,
-      comment: 'FK a productos_codificacion.id_producto',
+      type: DataTypes.STRING(20),
+      comment: 'FK a productos_codificacion.codigo_producto (VARCHAR(20))',
       references: {
         model: 'productos_codificacion',
-        key: 'id_producto'
+        key: 'codigo_producto'
       },
       onUpdate: 'CASCADE',
       onDelete: 'RESTRICT'
@@ -59,7 +59,7 @@ export const InventarioProductoModel = (connection, DataTypes) => {
     updatedAt: 'fecha_actualizacion',
     comment: 'Inventarios por producto terminado',
     indexes: [
-      { fields: ['id_producto'], name: 'idx_inventarios_id_producto' }
+      { fields: ['codigo_producto'], name: 'idx_inventarios_codigo_producto' }
     ]
   });
 };

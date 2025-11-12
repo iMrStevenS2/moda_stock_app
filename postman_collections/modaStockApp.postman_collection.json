@@ -1049,6 +1049,99 @@
 			]
 		},
 		{
+			"name": "GestionPedidos",
+			"item": [
+				{
+					"name": "CrearPedido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"id_cliente\": 1,\r\n\"creado_por\": \"admin\",\r\n\"detalles\": [\r\n{ \"id_producto\": 1, \"cantidad\": 2, \"precio_unitario\": 10000 },\r\n{ \"id_producto\": 2, \"cantidad\": 1, \"precio_unitario\": 5000 }\r\n]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/pedidos/crear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidos",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarPedidos",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "buscarUnPedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/pedidos/obtener/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidos",
+								"obtener",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiarEstadoPedido",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"estado\": \"pendiente\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/pedidos/4/estado",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidos",
+								"4",
+								"estado"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "tokenAuth",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true

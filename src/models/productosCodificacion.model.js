@@ -8,6 +8,13 @@ export const ProductosCodificacionModel = (connection, DataTypes) => {
       comment: 'Identificador único del producto (SERIAL PRIMARY KEY) FK A '
     },
 
+    codigo_producto: {
+      allowNull: false,
+      type: DataTypes.STRING(20),
+      unique: true,
+      comment: 'Código único del producto (VARCHAR(20)) - UNIQUE NOT NULL'
+    },
+
     nombre_producto: {
       allowNull: false,
       type: DataTypes.STRING(100),

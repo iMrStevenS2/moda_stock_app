@@ -11,6 +11,11 @@ const sequelize = new Sequelize(
     port: config.dbPort ? Number(config.dbPort) : 5432,
     dialect: config.dbDialect ?? 'postgres',
     logging: config.env === 'development' ? console.log : false,
+
+    dialectOptions: {
+      ssl: false,   //  <-- 🔥 IMPORTANTE PARA NEON LOCAL
+    },
+
     pool: {
       max: 5,
       min: 0,

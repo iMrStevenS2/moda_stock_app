@@ -3,36 +3,97 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { config } from './config/config.js';
 import sequelize from './config/database.js';
+import './models/index_models.js';
+import authRoutes from './routes/auth.routes.js';
+import publicRoutes from './routes/public.routes.js';
+import userManagerRoutes from './routes/userManager.routes.js';
+import usuariosRoutes from './routes/usuarios.routes.js';
+import clientesRoutes from './routes/clientes.routes.js';
+import proveedoresRoutes from './routes/proveedores.routes.js';
+import productosRoutes from './routes/productosCodificacion.routes.js';
+import insumosRoutes from './routes/insumos.routes.js';
+import pedidosRoutes from './routes/pedidos.routes.js';
+import inventariosRoutes from './routes/inventariosProductos.routes.js';
+import { verifyToken } from './middlewares/auth.middleware.js';
+import errorHandler from './middlewares/error.middleware.js';
+import { initializeDatabase } from './models/index_models.js';
+
 
 const app = express();
-const port = config.port;
+const port = config.port ?? process.env.PORT ?? 3000;
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Rutas públicas (sin autenticación)
+app.use('/auth', authRoutes);
+app.use('/public', publicRoutes);
+
+// Rutas protegidas (requieren autenticación)
+app.use('/usersManager', userManagerRoutes);
+app.use('/usuarios', verifyToken, usuariosRoutes);
+app.use('/clientes', verifyToken, clientesRoutes);
+app.use('/proveedores', verifyToken, proveedoresRoutes);
+app.use('/productos', verifyToken, productosRoutes);
+app.use('/insumos', verifyToken, insumosRoutes);
+app.use('/pedidos', verifyToken, pedidosRoutes);
+app.use('/inventarios', verifyToken, inventariosRoutes);
+//router.use('/clientes', verifyToken, clientesRoutes);
+//router.use('/proveedores', verifyToken, proveedoresRoutes);
+
 // Basic route
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Moda Stock App API',
     version: '0.0.1',
     status: 'running'
   });
 });
 
-// Routes will be added here later
-// routerApi(app);
+// Control de sincronización de la BD (opcional)
+const enableSync = (config.dbSync ?? process.env.DB_SYNC) === 'true';
+const syncAlter = (config.dbSyncAlter ?? process.env.DB_SYNC_ALTER) === 'true';
+const syncLog = (config.dbSyncLog ?? process.env.DB_SYNC_LOG) === 'true';
+const seedRequested = (process.env.DB_SEED === 'true');
 
-// Error handlers will be added here later
-
-app.listen(port, async () => {
+async function start() {
   try {
     await sequelize.authenticate();
+    console.log('Conexión BD OK');
+
+    // Si se solicita sincronizar, hacer sync y seed en una sola operación
+    if (enableSync) {
+      console.log(`🔁 Running sequelize.sync() (alter=${syncAlter}) — logging: ${syncLog}`);
+      await initializeDatabase({
+        sync: true,
+        seed: seedRequested,
+        syncOptions: { alter: syncAlter, logging: syncLog ? console.log : false }
+      });
+      console.log('✅ Database synchronized.');
+    } else if (seedRequested) {
+      // solo seed sin sync
+      console.log('🔁 Ejecutando seed (sin sync)');
+      await initializeDatabase({ sync: false, seed: true });
+      console.log('✅ Seeds aplicados.');
+    } else {
+      console.log('ℹ️ Database sync/seed omitidos (control externo o producción).');
+    }
+
+    app.use(errorHandler); // debe ir después de las rutas
+
+    app.listen(port, () => {
+      console.log(`🚀 Server running on port: ${port}`);
+      console.log(`📍 Environment: ${config.env}`);
+    });
+
+    // Mensaje adicional para compatibilidad con logs previos
     console.log('✅ Database connection established successfully.');
-    console.log(`🚀 Server running on port: ${port}`);
-    console.log(`📍 Environment: ${config.env}`);
-  } catch (error) {
-    console.error('❌ Unable to connect to the database:', error);
+  } catch (err) {
+    console.error('❌ Unable to start application:', err);
+    process.exit(1);
   }
-});
+}
+
+start();

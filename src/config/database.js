@@ -1,22 +1,26 @@
-import { Sequelize } from 'sequelize';
+import SequelizePkg from 'sequelize';
+const Sequelize = SequelizePkg?.Sequelize ?? SequelizePkg;
 import { config } from './config.js';
 
-const sequelize = new Sequelize(
-  config.dbName,
-  config.dbUser,
-  config.dbPassword,
-  {
-    host: config.dbHost,
-    port: config.dbPort,
-    dialect: 'postgres',
-    logging: config.env === 'development' ? console.log : false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    }
-  }
-);
+const isProduction = process.env.NODE_ENV === 'production';
 
-export default sequelize;
+// Usa DATABASE_URL (Vercel) o DATABASE_URL_LOCAL (local)
+const connectionString = isProduction
+  ? process.env.DATABASE_URL
+  : process.env.DATABASE_URL_LOCAL;
+
+const sequelize = new Sequelize(connectionString, {
+  dialect: 'postgres',
+  logging: config.env === 'development' ? console.log : false,
+
+  dialectOptions: isProduction
+    ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      }
+    : {}
+});
+
+export default sequelize; 

@@ -1,0 +1,24 @@
+
+PROBANDO CREACION DE USUARIO
+http://localhost:3000/usersManager/usuarios?ContentType=application/json
+
+{
+    "usuario": "juanpf",
+    "password": "",
+    "primer_nombre": "Juan",
+    "primer_apellido": "Pérez",
+    "tipo_documento": "CC",
+    "numero_documento": "12345665789",
+    "email": "juans.perez@example.com",
+    "id_rol": 3
+}
+
+
+buscar un usuario
+
+http://localhost:3000/usersManager/usuarios/buscar?estado=0
+
+por tipo+tipo_documento
+por nombre 
+por id
+Por estado

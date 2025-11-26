@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
     logging: config.env === 'development' ? console.log : false,
 
     dialectOptions: {
-      ssl: false,   //  <-- 🔥 IMPORTANTE PARA NEON LOCAL
+      ssl: true,
     },
 
     pool: {

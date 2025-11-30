@@ -4,7 +4,7 @@ services:
     image: postgres:17
     restart: always
     ports:
-      - "5432:5432"
+      - "5431:5432" # Cambiado para evitar conflicto con la base de datos en pgAdmin local
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin123
